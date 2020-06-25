@@ -32,6 +32,10 @@ push = require 'push'
 
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
+
+    smallFont = love.graphics.newFont('font.ttf', 8)
+    love.graphics.setFont(smallFont)
+        
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINODW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false,
         vsync = true,
@@ -47,14 +51,25 @@ end
 
 
 function love.draw()
+    -- begin rendering at virtual resolution
     push:apply('start')
 
+    love.graphics.clear(40 / 255, 45 / 255, 52 / 255, 255 / 255) -- background color
+
+    love.graphics.rectangle('fill', VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 5, 5) -- Doing subtraction to do manual adjustment for the position of the ball
+
+    love.graphics.rectangle('fill', 5, 20, 5, 20)
+    love.graphics.rectangle('fill', VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 40, 5, 20)
+
+    -- condensed onto one line from last example
+    -- note we are now using virtual width and height now for text placement
     love.graphics.printf(
         "Hello Pong!", 
         0, 
-        VIRTUAL_HEIGHT / 2 - 6, 
+        20, -- Height of "Hello Pong"
         VIRTUAL_WIDTH, 
         'center')
 
+    -- end rendering at virtual resolution
     push:apply('end')
 end
