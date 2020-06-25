@@ -34,7 +34,11 @@ function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
     smallFont = love.graphics.newFont('font.ttf', 8)
-    love.graphics.setFont(smallFont)
+    scoreFont = love.graphics.newFont('font.ttf', 32)
+    
+
+    player1Score = 0
+    player2Score = 0
         
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINODW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false,
@@ -63,12 +67,17 @@ function love.draw()
 
     -- condensed onto one line from last example
     -- note we are now using virtual width and height now for text placement
+    love.graphics.setFont(smallFont)
     love.graphics.printf(
         "Hello Pong!", 
         0, 
         20, -- Height of "Hello Pong"
         VIRTUAL_WIDTH, 
         'center')
+
+        love.graphics.setFont(scoreFont)
+        love.graphics.print(player1Score, VIRTUAL_WIDTH / 2 - 50, VIRTUAL_HEIGHT / 3)
+        love.graphics.print(player2Score, VIRTUAL_WIDTH / 2 + 30, VIRTUAL_HEIGHT / 3)
 
     -- end rendering at virtual resolution
     push:apply('end')
