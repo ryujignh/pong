@@ -50,6 +50,11 @@ function love.load()
 
     ballX = VIRTUAL_WIDTH / 2 - 2
     ballY = VIRTUAL_HEIGHT / 2 - 2
+
+    ballDX = math.random(2) == 1 and -100 or 100
+    ballDY = math.random(-50, 50)
+
+    gameState = 'start'
         
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINODW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false,
@@ -72,11 +77,29 @@ function love.update(dt)
     elseif love.keyboard.isDown('down') then
         player2Y = math.min(VIRTUAL_HEIGHT - 20, player2Y + PADDLE_SPEED * dt)
     end
+
+    if gameState == 'play' then
+        ballX = ballX + ballDX * dt
+        ballY = ballY + ballDY * dt
+    end
 end
 
 function love.keypressed(key)
     if key == 'escape' then
         love.event.quit()
+    elseif key == 'enter' or key == 'return' then
+        if gameState == 'start' then
+            gameState = 'play'
+        elseif gameState == 'play' then
+            gameState = 'start'
+
+            ballX = VIRTUAL_WIDTH / 2 - 2
+            ballY = VIRTUAL_HEIGHT / 2 - 2
+
+            ballDX = math.random(2) == 1 and -100 or 100
+            ballDY = math.random(-50, 50)
+            
+        end
     end
 end
 
@@ -95,16 +118,15 @@ function love.draw()
     -- condensed onto one line from last example
     -- note we are now using virtual width and height now for text placement
     love.graphics.setFont(smallFont)
-    love.graphics.printf(
-        "Hello Pong!", 
-        0, 
-        20, -- Height of "Hello Pong"
-        VIRTUAL_WIDTH, 
-        'center')
+    if gameState == 'start' then
+        love.graphics.printf("Hello Start State!", 0, 20, VIRTUAL_WIDTH, 'center')
+    elseif gameState == 'play' then
+        love.graphics.printf("Hello Play State!", 0, 20, VIRTUAL_WIDTH, 'center')
+    end
 
-        love.graphics.setFont(scoreFont)
-        love.graphics.print(player1Score, VIRTUAL_WIDTH / 2 - 50, VIRTUAL_HEIGHT / 3)
-        love.graphics.print(player2Score, VIRTUAL_WIDTH / 2 + 30, VIRTUAL_HEIGHT / 3)
+    love.graphics.setFont(scoreFont)
+    love.graphics.print(player1Score, VIRTUAL_WIDTH / 2 - 50, VIRTUAL_HEIGHT / 3)
+    love.graphics.print(player2Score, VIRTUAL_WIDTH / 2 + 30, VIRTUAL_HEIGHT / 3)
 
         -- ball
     love.graphics.rectangle('fill', ballX, ballY, 4, 4) -- Doing subtraction to do manual adjustment for the position of the ball
