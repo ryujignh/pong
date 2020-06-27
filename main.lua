@@ -28,6 +28,8 @@ WINDOW_HEIGHT = 720
 VIRTUAL_WIDTH = 432
 VIRTUAL_HEIGHT= 243
 
+PADDLE_SPEED = 200
+
 push = require 'push'
 
 function love.load()
@@ -39,12 +41,31 @@ function love.load()
 
     player1Score = 0
     player2Score = 0
+
+    player1Y = 30
+    player2Y = VIRTUAL_HEIGHT - 40
         
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINODW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false,
         vsync = true,
         resizable = false
     })
+end
+
+
+function love.update(dt)
+    if love.keyboard.isDown('w') then
+        player1Y = player1Y - PADDLE_SPEED * dt
+    elseif love.keyboard.isDown('s') then
+        player1Y = player1Y + PADDLE_SPEED * dt
+    end
+
+    if love.keyboard.isDown('up') then
+        player2Y = player2Y - PADDLE_SPEED * dt
+
+    elseif love.keyboard.isDown('down') then
+        player2Y = player2Y + PADDLE_SPEED * dt
+    end
 end
 
 function love.keypressed(key)
@@ -60,10 +81,13 @@ function love.draw()
 
     love.graphics.clear(40 / 255, 45 / 255, 52 / 255, 255 / 255) -- background color
 
+    -- ball
     love.graphics.rectangle('fill', VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 5, 5) -- Doing subtraction to do manual adjustment for the position of the ball
 
-    love.graphics.rectangle('fill', 5, 20, 5, 20)
-    love.graphics.rectangle('fill', VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 40, 5, 20)
+    -- left paddle
+    love.graphics.rectangle('fill', 10, player1Y, 5, 20)
+    -- right paddle
+    love.graphics.rectangle('fill', VIRTUAL_WIDTH - 10, player2Y, 5, 20)
 
     -- condensed onto one line from last example
     -- note we are now using virtual width and height now for text placement
