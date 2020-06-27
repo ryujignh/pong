@@ -33,6 +33,9 @@ PADDLE_SPEED = 200
 push = require 'push'
 
 function love.load()
+    math.randomseed(os.time())
+
+    
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
     smallFont = love.graphics.newFont('font.ttf', 8)
@@ -44,6 +47,9 @@ function love.load()
 
     player1Y = 30
     player2Y = VIRTUAL_HEIGHT - 40
+
+    ballX = VIRTUAL_WIDTH / 2 - 2
+    ballY = VIRTUAL_HEIGHT / 2 - 2
         
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINODW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false,
@@ -81,9 +87,6 @@ function love.draw()
 
     love.graphics.clear(40 / 255, 45 / 255, 52 / 255, 255 / 255) -- background color
 
-    -- ball
-    love.graphics.rectangle('fill', VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 5, 5) -- Doing subtraction to do manual adjustment for the position of the ball
-
     -- left paddle
     love.graphics.rectangle('fill', 10, player1Y, 5, 20)
     -- right paddle
@@ -102,6 +105,9 @@ function love.draw()
         love.graphics.setFont(scoreFont)
         love.graphics.print(player1Score, VIRTUAL_WIDTH / 2 - 50, VIRTUAL_HEIGHT / 3)
         love.graphics.print(player2Score, VIRTUAL_WIDTH / 2 + 30, VIRTUAL_HEIGHT / 3)
+
+        -- ball
+    love.graphics.rectangle('fill', ballX, ballY, 4, 4) -- Doing subtraction to do manual adjustment for the position of the ball
 
     -- end rendering at virtual resolution
     push:apply('end')
