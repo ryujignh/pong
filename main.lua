@@ -66,48 +66,60 @@ end
 
 
 function love.update(dt)
-
-    if ball:collides(paddle1) then
-        -- deflect ball to the right
-        ball.dx = -ball.dx
-    end
-
-    if ball:collides(paddle2) then
-        -- deflect ball to the left
-        ball.dx = -ball.dx
-    end
-
-    if ball.y <= 0 then
-        -- deflect the ball down
-        ball.dy = -ball.dy        
-        ball.y = 0
-    end
-
-    if ball.y >= VIRTUAL_HEIGHT - 4 then
-        ball.dy = -ball.dy
-        ball.y = VIRTUAL_HEIGHT - 4
-    end
-
-    paddle1:update(dt)
-    paddle2:update(dt)
-
-    if love.keyboard.isDown('w') then
-        paddle1.dy = -PADDLE_SPEED
-    elseif love.keyboard.isDown('s') then
-        paddle1.dy = PADDLE_SPEED
-    else
-        paddle1.dy = 0
-    end
-
-    if love.keyboard.isDown('up') then
-        paddle2.dy = -PADDLE_SPEED
-    elseif love.keyboard.isDown('down') then
-        paddle2.dy = PADDLE_SPEED
-    else
-        paddle2.dy = 0
-    end
-
     if gameState == 'play' then
+
+        if ball.x <= 0 then
+            player2Score = player2Score + 1
+            ball:reset()
+            gameState = 'start'
+        end
+
+        if ball.x >= VIRTUAL_WIDTH - 4 then
+            player1Score = player1Score + 1
+            ball:reset()
+            gameState = 'start'
+        end
+
+        if ball:collides(paddle1) then
+            -- deflect ball to the right
+            ball.dx = -ball.dx
+        end
+
+        if ball:collides(paddle2) then
+            -- deflect ball to the left
+            ball.dx = -ball.dx
+        end
+
+        if ball.y <= 0 then
+            -- deflect the ball down
+            ball.dy = -ball.dy        
+            ball.y = 0
+        end
+
+        if ball.y >= VIRTUAL_HEIGHT - 4 then
+            ball.dy = -ball.dy
+            ball.y = VIRTUAL_HEIGHT - 4
+        end
+
+        paddle1:update(dt)
+        paddle2:update(dt)
+
+        if love.keyboard.isDown('w') then
+            paddle1.dy = -PADDLE_SPEED
+        elseif love.keyboard.isDown('s') then
+            paddle1.dy = PADDLE_SPEED
+        else
+            paddle1.dy = 0
+        end
+
+        if love.keyboard.isDown('up') then
+            paddle2.dy = -PADDLE_SPEED
+        elseif love.keyboard.isDown('down') then
+            paddle2.dy = PADDLE_SPEED
+        else
+            paddle2.dy = 0
+        end
+
         ball:update(dt)
     end
 end
@@ -118,9 +130,6 @@ function love.keypressed(key)
     elseif key == 'enter' or key == 'return' then
         if gameState == 'start' then
             gameState = 'play'
-        elseif gameState == 'play' then
-            gameState = 'start'
-            ball:reset()
         end
     end
 end
@@ -140,11 +149,7 @@ function love.draw()
     -- condensed onto one line from last example
     -- note we are now using virtual width and height now for text placement
     love.graphics.setFont(smallFont)
-    if gameState == 'start' then
-        love.graphics.printf("Hello Start State!", 0, 20, VIRTUAL_WIDTH, 'center')
-    elseif gameState == 'play' then
-        love.graphics.printf("Hello Play State!", 0, 20, VIRTUAL_WIDTH, 'center')
-    end
+    
 
     love.graphics.setFont(scoreFont)
     love.graphics.print(player1Score, VIRTUAL_WIDTH / 2 - 50, VIRTUAL_HEIGHT / 3)
