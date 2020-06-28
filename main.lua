@@ -67,6 +67,27 @@ end
 
 function love.update(dt)
 
+    if ball:collides(paddle1) then
+        -- deflect ball to the right
+        ball.dx = -ball.dx
+    end
+
+    if ball:collides(paddle2) then
+        -- deflect ball to the left
+        ball.dx = -ball.dx
+    end
+
+    if ball.y <= 0 then
+        -- deflect the ball down
+        ball.dy = -ball.dy        
+        ball.y = 0
+    end
+
+    if ball.y >= VIRTUAL_HEIGHT - 4 then
+        ball.dy = -ball.dy
+        ball.y = VIRTUAL_HEIGHT - 4
+    end
+
     paddle1:update(dt)
     paddle2:update(dt)
 
