@@ -51,14 +51,9 @@ function love.load()
     player1Y = 30
     player2Y = VIRTUAL_HEIGHT - 40
 
-    ballX = VIRTUAL_WIDTH / 2 - 2
-    ballY = VIRTUAL_HEIGHT / 2 - 2
-
     paddle1 = Paddle(5, 20, 5, 20)
     paddle2 = Paddle(VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 30, 5, 20)
-
-    ballDX = math.random(2) == 1 and -100 or 100
-    ballDY = math.random(-50, 50)
+    ball = Ball(VIRTUAL_WIDTH / 2 -  2, VIRTUAL_HEIGHT / 2 - 2, 5, 5)
 
     gameState = 'start'
         
@@ -92,8 +87,7 @@ function love.update(dt)
     end
 
     if gameState == 'play' then
-        ballX = ballX + ballDX * dt
-        ballY = ballY + ballDY * dt
+        ball:update(dt)
     end
 end
 
@@ -105,13 +99,7 @@ function love.keypressed(key)
             gameState = 'play'
         elseif gameState == 'play' then
             gameState = 'start'
-
-            ballX = VIRTUAL_WIDTH / 2 - 2
-            ballY = VIRTUAL_HEIGHT / 2 - 2
-
-            ballDX = math.random(2) == 1 and -100 or 100
-            ballDY = math.random(-50, 50)
-            
+            ball:reset()
         end
     end
 end
@@ -125,6 +113,7 @@ function love.draw()
 
     paddle1:render() -- left paddle
     paddle2:render() -- right paddle
+    ball:render()
 
     -- condensed onto one line from last example
     -- note we are now using virtual width and height now for text placement
@@ -138,9 +127,6 @@ function love.draw()
     love.graphics.setFont(scoreFont)
     love.graphics.print(player1Score, VIRTUAL_WIDTH / 2 - 50, VIRTUAL_HEIGHT / 3)
     love.graphics.print(player2Score, VIRTUAL_WIDTH / 2 + 30, VIRTUAL_HEIGHT / 3)
-
-        -- ball
-    love.graphics.rectangle('fill', ballX, ballY, 4, 4) -- Doing subtraction to do manual adjustment for the position of the ball
 
     -- end rendering at virtual resolution
     push:apply('end')
